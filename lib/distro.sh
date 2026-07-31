@@ -1,30 +1,29 @@
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-source "$(dirname "${BASH_SOURCE[0]}")/logger.sh"
-
-
 detect_distro() {
 
-    if [ -f /etc/fedora-release ]; then
-        DISTRO="fedora"
-
-    elif [ -f /etc/ubuntu-release ] || grep -qi ubuntu /etc/os-release; then
-        DISTRO="ubuntu"
-
-    elif grep -qi debian /etc/os-release; then
-        DISTRO="debian"
-
-    elif [ -f /etc/arch-release ]; then
-        DISTRO="arch"
-
-    else
-        log_error "Unsupported Linux distribution."
-        exit 1
+    if [ -n "${DISTRO:-}" ]; then
+        return 0
     fi
 
 
-    log_info "Detected distro: $DISTRO"
+    if [ -f /etc/fedora-release ]; then
+
+        DISTRO="fedora"
+
+    elif [ -f /etc/arch-release ]; then
+
+        DISTRO="arch"
+
+    elif [ -f /etc/debian_version ]; then
+
+        DISTRO="ubuntu"
+
+    else
+
+        log_error "Unsupported Linux distribution."
+        return 1
+
+    fi
+
+
 
 }

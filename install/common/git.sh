@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/installer.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../../lib/installer.sh"
 
 
 install_git() {

@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-source "($dirname "${BASH_SOURCE[0]}")/../lib/installer.sh"
-source "($dirname "${BASH_SOURCE[0]}")/../lib/config.sh"
+source "($dirname "${BASH_SOURCE[0]}")/../../lib/installer.sh"
+source "($dirname "${BASH_SOURCE[0]}")/../../lib/config.sh"
 
 install_development() {
     load_config

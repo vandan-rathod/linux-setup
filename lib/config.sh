@@ -2,6 +2,21 @@
 
 set -euo pipefail
 
+
 load_config() {
-    source "$(dirname "${BASH_SOURCCE[0]}")/../config/packages.conf"
+
+    local config_file="$(dirname "${BASH_SOURCE[0]}")/../configs/packages.conf"
+
+
+    if [[ -f "$config_file" ]]; then
+
+        source "$config_file"
+
+    else
+
+        echo "Config file not found: $config_file"
+        return 1
+
+    fi
+
 }

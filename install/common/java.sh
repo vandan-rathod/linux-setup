@@ -2,18 +2,51 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/../lib/installer.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../../lib/package_manager.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../../lib/distro.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/../../lib/logger.sh"
 
 
 install_java() {
 
+    detect_distro
+
     log_info "Installing Java..."
 
-    install_packages \
-        java-21-openjdk \
-        java-21-openjdk-devel
+
+    case "$DISTRO" in
+
+        fedora)
+
+            install_package java-21-openjdk-devel
+
+            ;;
 
 
-    log_success "Java installed."
+        ubuntu|debian)
+
+            install_package openjdk-21-jdk
+
+            ;;
+
+
+        arch)
+
+            install_package jdk21-openjdk
+
+            ;;
+
+
+        *)
+
+            log_error "Unsupported distro for Java."
+            return 1
+
+            ;;
+
+    esac
+
+
+    log_success "Java setup completed."
 
 }
