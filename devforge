@@ -10,6 +10,10 @@ source "$SCRIPT_DIR/lib/config.sh"
 
 show_banner
 
+source "$SCRIPT_DIR/lib/bootstrap.sh"
+
+initialize_devforge
+
 source "$SCRIPT_DIR/lib/system_info.sh"
 source "$SCRIPT_DIR/lib/animation.sh"
 
@@ -27,14 +31,16 @@ case "$COMMAND" in
         ;;
     
     update)
-        source "$SCRIPT_DIR/commands/update.sh"
+        bash "$SCRIPT_DIR/commands/update.sh" "${@:2}"
         ;;
     
     doctor)
-        sourcee "$SCRIPT_DIR/commands/doctor.sh"
+        shift
+        source "$SCRIPT_DIR/commands/doctor.sh"
         ;;
     
     repair)
+        shift
         source "$SCRIPT_DIR/commands/repair.sh"
         ;;
     
@@ -52,7 +58,7 @@ case "$COMMAND" in
         ;;
     
     uninstall)
-        source "$SCRIPT_DIR/commands/uninstall.sh"
+        bash "$SCRIPT_DIR/commands/uninstall.sh" "${@:2}"
         ;;
     
     modules)

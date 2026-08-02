@@ -5,23 +5,19 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/../../lib/installer.sh"
 
 
-install_git() {
+execute() {
 
     log_info "Installing Git tools..."
-
 
     install_packages \
         git \
         git-lfs
 
-
-    if command -v gh &>/dev/null
-    then
-        log_success "GitHub CLI already installed."
-    else
+    if ! command -v gh >/dev/null 2>&1; then
         install_package gh
+    else
+        log_success "GitHub CLI already installed."
     fi
-
 
     log_success "Git setup completed."
 

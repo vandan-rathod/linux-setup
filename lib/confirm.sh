@@ -23,3 +23,26 @@ confirm_installation() {
     esac
 
 }
+
+confirm_action() {
+
+    local message="$1"
+
+    echo
+    read -rp "$message [y/N]: " response
+
+    case "$response" in
+
+        y|Y)
+
+            return 0
+            ;;
+
+        *)
+
+            return 1
+            ;;
+
+    esac
+
+}

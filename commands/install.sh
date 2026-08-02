@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 source "$SCRIPT_DIR/lib/logger.sh"
 source "$SCRIPT_DIR/lib/distro.sh"
-source "$SCRIPT_DIR/lib/module_manager.sh"
+source "$SCRIPT_DIR/lib/action_loader.sh"
 
 echo
 
@@ -24,23 +24,18 @@ else
 
     MODULES=("$@")
 
-    source "$SCRIPT_DIR/lib/confirm.sh"
-    source "$SCRIPT_DIR/lib/preview.sh"
-
-
-    show_install_plan
-
-
-    confirm_action "Proceed with installation?"
-
 fi
 
-TOTAL=${#MODULES[@]}
-CURRENT=0
+source "$SCRIPT_DIR/lib/preview.sh"
+
+show_install_plan
 
 source "$SCRIPT_DIR/lib/confirm.sh"
 
-confirm_installation
+confirm_installation "Proceed with installation?"
+
+TOTAL=${#MODULES[@]}
+CURRENT=0
 
 for module in "${MODULES[@]}"; do
 
@@ -49,12 +44,21 @@ for module in "${MODULES[@]}"; do
     echo
     echo "[$CURRENT/$TOTAL] Installing $module"
 
-    load_module "$module"
+    load_action_module install "$module"
 
-    installer="install_${module}"
+    if declare -f execute >/dev/null; then
 
-    "$installer"
+        execute
+
+        unset -f execute
+
+    else
+
+        log_error "Module '$module' doesn't export execute()."
+        exit 1
+
+    fi
 
 done
 
-log_success "Requested module installed successfully!"
+log_success "Installation completed successfully!"
